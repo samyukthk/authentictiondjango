@@ -14,16 +14,29 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.exceptions import ValidationError
 
+# class Signup(APIView):
+#     def post(self, request, format=None):
+#         serializer = UserSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             user = serializer.instance
+#             token, created = Token.objects.get_or_create(user=user)
+#             return Response({"user": serializer.data, "token": token.key}, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
 class Signup(APIView):
     def post(self, request, format=None):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             user = serializer.instance
+            user = serializer.save() 
+            user.is_user = True  # Set is_user to True here
+            user.save()
             token, created = Token.objects.get_or_create(user=user)
             return Response({"user": serializer.data, "token": token.key}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
 class Login(APIView):
     def post(self, request, format=None):
@@ -39,7 +52,6 @@ class Login(APIView):
 # class TestView(APIView):
 #     authentication_classes = [SessionAuthentication, TokenAuthentication]
 #     permission_classes = [IsAuthenticated]
-    
 #     def get(self, request, format=None):
 #         user = request.user
 #         serialized_user = UserSerializer(user).data
