@@ -37,6 +37,22 @@ class Signup(APIView):
             token, created = Token.objects.get_or_create(user=user)
             return Response({"user": serializer.data, "token": token.key}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+    
+# class TeamLeadSignup(APIView):
+#     def post(self, request, format=None):
+#         serializer = UserSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             Teamlead = serializer.instance
+#             Teamlead = serializer.save() 
+#             Teamlead.is_teamlead = True  # Set is_user to True here
+#             Teamlead.save()
+#             token, created = Token.objects.get_or_create(Teamlead=Teamlead)
+#             return Response({"Teamlead": serializer.data, "token": token.key}, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class Login(APIView):
     def post(self, request, format=None):
